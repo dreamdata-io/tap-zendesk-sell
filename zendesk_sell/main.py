@@ -3,6 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 from stream import Stream
+from zendesk_client import ZendeskSell
 
 
 class Config(BaseModel):
@@ -32,7 +33,9 @@ def tap(config_filename: str, state_filename: Optional[str]):
 
     config = Config.parse_file(config_filename)
 
-    print(config.dict())
+    client = ZendeskSell(config.client_id, config.client_secret, config.refresh_token)
+
+    print(client.get_access_token())
 
 
 if __name__ == "__main__":
