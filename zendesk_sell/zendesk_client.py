@@ -57,8 +57,7 @@ class ZendeskSell:
 
     def _refresh_access_token(self):
         try:
-            req = requests.Request(
-                "POST",
+            resp = requests.post(
                 "https://api.getbase.com/oauth2/token",
                 data={
                     "grant_type": "refresh_token",
@@ -66,8 +65,6 @@ class ZendeskSell:
                 },
                 auth=(self._client_id, self._client_secret),
             )
-            prep = req.prepare()
-            resp = self._session.send(prep)
             resp.raise_for_status()
         except requests.RequestException as err:
             print(err)
