@@ -35,7 +35,7 @@ def tap(config_filename: str, state_filename: Optional[str]):
 
     client = ZendeskSell(config.client_id, config.client_secret, config.refresh_token)
 
-    print(client.get_access_token())
+    print(client.get_contacts())
 
 
 if __name__ == "__main__":

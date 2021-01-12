@@ -32,6 +32,13 @@ class ZendeskSell:
         self._refresh_token = refresh_token
         self._session = requests.Session()
 
+    def get_contacts(self, per_page: int = 100):
+        return self.call(
+            "GET",
+            "/v2/contacts",
+            params=dict(sort_by="updated_at:desc", per_page=per_page),
+        )
+
     @Decorators.refresh_token
     def call(self, method: str, path: str, *args, **kwargs) -> Dict:
         headers = kwargs.get("headers", {})
