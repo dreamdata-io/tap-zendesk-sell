@@ -13,7 +13,9 @@ class State(BaseModel):
     bookmarks: Dict[str, StateEntry] = {}
 
     def set_stream_state(self, stream: str, key: str, value: Any):
-        self.bookmarks[stream] = StateEntry(key=key, value=value, kind=str(type(value)))
+        self.bookmarks[stream] = StateEntry(
+            key=key, value=value, kind=type(value).__name__
+        )
 
     def get_stream_state(self, stream: str) -> Optional[StateEntry]:
         return self.bookmarks.get(stream)
