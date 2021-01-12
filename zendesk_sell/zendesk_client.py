@@ -1,9 +1,11 @@
 from typing import Optional, Dict
 import time
 import json
+import logging
 
 import requests
 
+logger = logging.getLogger(__name__)
 
 class ZendeskSell:
     _client_id: str
@@ -51,8 +53,8 @@ class ZendeskSell:
             )
             resp.raise_for_status()
             return resp.json()
-        except requests.RequestException as err:
-            print(err)
+        except requests.RequestException:
+            logger.exception("failed to perform request")
             raise
 
     def _refresh_access_token(self):
