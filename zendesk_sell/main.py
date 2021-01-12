@@ -1,6 +1,7 @@
 import argparse
 from typing import Optional
 from pydantic import BaseModel
+import json
 
 from stream import Stream
 from zendesk_client import ZendeskSell
@@ -35,7 +36,10 @@ def tap(config_filename: str, state_filename: Optional[str]):
 
     client = ZendeskSell(config.client_id, config.client_secret, config.refresh_token)
 
-    print(client.get_contacts())
+    contacts = client.get_contacts(per_page=1)
+
+    for contact in contacts:
+        print(json.dumps(contact, indent=2))
 
 
 if __name__ == "__main__":
