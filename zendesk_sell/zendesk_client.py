@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Iterable, Optional, Dict
 import time
 import json
 import logging
@@ -25,15 +25,40 @@ class ZendeskSell:
         self._refresh_token = refresh_token
 
     def get_contacts(self, per_page: int = 100):
-        return self.do(
+        return self.__paginate(
             "GET",
             "/v2/contacts",
-            params=dict(sort_by="updated_at:desc", per_page=per_page),
+            sort_by="updated_at:desc",
+            per_page=per_page,
         )
 
-    def do(self, *args, **kwargs) -> Dict:
-        session = self.__session()
-        return self.__do(session, *args, **kwargs)
+    def __paginate(
+        self,
+        method: str,
+        path: str,
+        sort_by: str,
+        per_page: int = 100,
+        page: int = 1,
+        **kwargs,
+    ) -> Iterable[Dict]:
+        params = kwargs.pop("params", {})
+        params.update({"sort_by": sort_by, "per_page": per_page})
+
+        while True:
+            params.update({"page": page})
+            response_data = self.__do(method, path, params=params, **kwargs)
+
+            items = response_data["items"]
+
+            for entry in items:
+                data = entry["data"]
+                yield data
+
+            next_page = response_data["meta"].get("links", {}).get("next_page")
+            if next_page is None:
+                return
+
+            page += 1
 
     def __session(self) -> requests.Session:
         if self._access_token_ttl is not None and time.time() < self._access_token_ttl:
@@ -46,13 +71,10 @@ class ZendeskSell:
         session.headers.update({"Authorization": f"Bearer {token}"})
         return session
 
-    def __do(
-        self, session: requests.Session, method: str, path: str, *args, **kwargs
-    ) -> Dict:
+    def __do(self, method: str, path: str, **kwargs) -> Dict:
+        session = self.__session()
         try:
-            resp = session.request(
-                method, "https://api.getbase.com" + path, *args, **kwargs
-            )
+            resp = session.request(method, "https://api.getbase.com" + path, **kwargs)
             resp.raise_for_status()
             return resp.json()
         except requests.RequestException:
