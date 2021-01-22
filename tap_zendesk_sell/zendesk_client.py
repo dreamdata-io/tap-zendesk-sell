@@ -70,9 +70,11 @@ class ZendeskSell:
 
     def __do(self, method: str, path: str, **kwargs) -> Dict:
         session = self.__session()
-        resp = session.request(method, "https://api.getbase.com" + path, **kwargs)
-        resp.raise_for_status()
-        return resp.json()
+        with session.request(
+            method, "https://api.getbase.com" + path, **kwargs
+        ) as resp:
+            resp.raise_for_status()
+            return resp.json()
 
     def __session(self) -> requests.Session:
         if self._access_token_ttl is not None and time.time() < self._access_token_ttl:
