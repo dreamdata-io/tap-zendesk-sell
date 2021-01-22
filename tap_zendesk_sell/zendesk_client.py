@@ -53,7 +53,7 @@ class ZendeskSell:
             params.update({"page": page})
             response_data = self.__do(method, path, params=params, **kwargs)
 
-            items = response_data["items"]
+            items = response_data.get("items", [])
             if not items:
                 return
 
