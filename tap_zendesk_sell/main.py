@@ -6,8 +6,14 @@ from typing import Any, Dict, Iterable, Optional
 
 from pydantic import BaseModel
 
-from stream import Stream, decode_dt, encode_dt, skip_descending, skip_unordered
-from zendesk_client import ZendeskSell
+from tap_zendesk_sell.stream import (
+    Stream,
+    decode_dt,
+    encode_dt,
+    skip_descending,
+    skip_unordered,
+)
+from tap_zendesk_sell.zendesk_client import ZendeskSell
 
 root = logging.getLogger()
 root.setLevel(logging.INFO)
