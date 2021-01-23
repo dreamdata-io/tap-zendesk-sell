@@ -92,6 +92,7 @@ class ZendeskSell:
         self._session = requests.Session()
         self._session.headers.update({"Authorization": f"Bearer {token}"})
 
+        # 409 is unique to zendesk sell and is raised when we are throttled
         retries = Retry(
             total=5,
             backoff_factor=0.1,
