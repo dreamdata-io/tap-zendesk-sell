@@ -1,15 +1,16 @@
 import argparse
 from typing import Iterable, Optional, Dict, Any
-from pydantic import BaseModel
 import logging
 import sys
 import time
+import logging
+import sys
+
+from pydantic import BaseModel
 
 from stream import Stream, encode_dt, decode_dt, skip_descending, skip_unordered
 from zendesk_client import ZendeskSell
 
-import logging
-import sys
 
 root = logging.getLogger()
 root.setLevel(logging.INFO)
