@@ -1,15 +1,19 @@
 import argparse
-from typing import Iterable, Optional, Dict, Any
-from pydantic import BaseModel
 import logging
 import sys
 import time
+from typing import Any, Dict, Iterable, Optional
 
-from stream import Stream, encode_dt, decode_dt, skip_descending, skip_unordered
-from zendesk_client import ZendeskSell
+from pydantic import BaseModel
 
-import logging
-import sys
+from tap_zendesk_sell.stream import (
+    Stream,
+    decode_dt,
+    encode_dt,
+    skip_descending,
+    skip_unordered,
+)
+from tap_zendesk_sell.zendesk_client import ZendeskSell
 
 root = logging.getLogger()
 root.setLevel(logging.INFO)
@@ -22,9 +26,9 @@ root.addHandler(handler)
 
 
 class Config(BaseModel):
-    user_agent: Optional[str]
     client_id: str
     client_secret: str
+    user_agent: Optional[str] = None
     refresh_token: Optional[str] = None
     access_token: Optional[str] = None
 
@@ -56,8 +60,6 @@ def tap(config_filename: str, state_filename: Optional[str]):
     stream.write_state()
 
     config = Config.parse_file(config_filename)
-
-    print(config.json())
 
     client = ZendeskSell(
         config.client_id,
@@ -234,11 +236,16 @@ def process_stream(
 
             i += 1
 
+            if i % 1000 == 0:
+                logging.info(
+                    f"{stream_id}: processed {i} records in {time.time() - start_time:.2f}"
+                )
+
             if max and i >= max:
                 break
 
         logging.info(
-            f"{stream_id}: processed {i} records in {time.time() - start_time:.2f}s"
+            f"{stream_id}: completed. Processed {i} records in {time.time() - start_time:.2f}s"
         )
 
         return yield_values
