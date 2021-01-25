@@ -11,7 +11,7 @@ setup(
     classifiers=["Programming Language :: Python :: 3 :: Only"],
     py_modules=["tap_zendesk_sell"],
     install_requires=[
-        "pydantic==1.7.3",
+        "pydantic==1.5.1",
         "requests==2.22.0",
     ],
     entry_points="""
