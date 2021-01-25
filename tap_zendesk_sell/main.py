@@ -26,9 +26,9 @@ root.addHandler(handler)
 
 
 class Config(BaseModel):
-    user_agent: Optional[str]
     client_id: str
     client_secret: str
+    user_agent: Optional[str] = None
     refresh_token: Optional[str] = None
     access_token: Optional[str] = None
 
