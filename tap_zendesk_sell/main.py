@@ -61,8 +61,6 @@ def tap(config_filename: str, state_filename: Optional[str]):
 
     config = Config.parse_file(config_filename)
 
-    print(config.json())
-
     client = ZendeskSell(
         config.client_id,
         config.client_secret,
