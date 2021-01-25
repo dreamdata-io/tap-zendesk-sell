@@ -4,7 +4,7 @@ import base64
 from datetime import datetime
 from typing import TextIO, Dict, Optional, Any, Iterable
 
-from tap_zendesk_sell.state import State, StateEntry
+from tap_zendesk_sell.state import st, StateEntry
 
 
 class _DatetimeEncoder(json.JSONEncoder):
