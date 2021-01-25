@@ -236,11 +236,16 @@ def process_stream(
 
             i += 1
 
+            if i % 1000 == 0:
+                logging.info(
+                    f"{stream_id}: processed {i} records in {time.time() - start_time:.2f}"
+                )
+
             if max and i >= max:
                 break
 
         logging.info(
-            f"{stream_id}: processed {i} records in {time.time() - start_time:.2f}s"
+            f"{stream_id}: completed. Processed {i} records in {time.time() - start_time:.2f}s"
         )
 
         return yield_values
