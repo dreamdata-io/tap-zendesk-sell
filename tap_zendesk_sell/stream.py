@@ -68,7 +68,7 @@ def skip_unordered(gen: Iterable[Dict], state: datetime, key: str) -> Iterable[D
     for record in gen:
         replication_value = decode_dt(record[key])
         if replication_value >= state:
-            random_list.append(random_list)
+            random_list.append(record)
 
     yield from sorted(
         random_list, key=lambda record: decode_dt(record[key]), reverse=False
