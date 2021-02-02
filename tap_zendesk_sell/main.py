@@ -173,6 +173,7 @@ def process_ordered_streams(stream: Stream, client: ZendeskSell):
         "leads",
         "loss_reasons",
         "users",
+        "calls",
     ]:
         state_entry = stream.get_stream_state(endpoint)
         if state_entry:
