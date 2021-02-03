@@ -132,7 +132,15 @@ def process_unordered_streams(stream: Stream, client: ZendeskSell):
     order_dir = None
     partition_key = "updated_at"
     per_page = 100
-    stream_ids = ["lead_unqualified_reasons", "pipelines", "stages"]
+    stream_ids = [
+        "calls",
+        "call_outcomes",
+        "visits",
+        "visit_outcomes",
+        "lead_unqualified_reasons",
+        "pipelines",
+        "stages",
+    ]
 
     for endpoint in stream_ids:
         state_entry = stream.get_stream_state(endpoint)
@@ -173,12 +181,8 @@ def process_ordered_streams(stream: Stream, client: ZendeskSell):
         "leads",
         "loss_reasons",
         "users",
-        "calls",
-        "call_outcomes",
         "tags",
         "tasks",
-        "visits",
-        "visit_outcomes",
     ]:
         state_entry = stream.get_stream_state(endpoint)
         if state_entry:
