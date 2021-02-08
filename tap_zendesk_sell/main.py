@@ -229,7 +229,7 @@ def process_stream(
 
                 replication_value = decode_dt(record[replication_key])
 
-                if state and replication_value <= state:
+                if state and replication_value < state:
                     continue
 
                 stream.set_stream_state(
