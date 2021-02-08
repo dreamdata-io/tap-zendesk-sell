@@ -64,6 +64,8 @@ def skip_descending(gen: Iterable[Dict], state: datetime, key: str) -> Iterable[
 def skip_unordered(gen: Iterable[Dict], state: datetime, key: str) -> Iterable[Dict]:
     """runs through all the items (it has to, because they have no ordering)
     and sorts and filters them based on the previous state"""
+    if not state:
+        yield from sorted(gen, key=lambda record: decode_dt(record[key]), reverse=False)
     random_list = []
     for record in gen:
         replication_value = decode_dt(record[key])

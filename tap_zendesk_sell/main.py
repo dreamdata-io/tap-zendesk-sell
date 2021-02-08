@@ -153,8 +153,7 @@ def process_unordered_streams(stream: Stream, client: ZendeskSell):
             endpoint, order_by=order_by, order_dir=order_dir, per_page=per_page
         )
 
-        if state:
-            record_gen = skip_unordered(record_gen, state, partition_key)
+        record_gen = skip_unordered(record_gen, state, partition_key)
 
         process_stream(
             stream,
@@ -230,7 +229,7 @@ def process_stream(
 
                 replication_value = decode_dt(record[replication_key])
 
-                if state and replication_value <= state:
+                if state and replication_value < state:
                     continue
 
                 stream.set_stream_state(
