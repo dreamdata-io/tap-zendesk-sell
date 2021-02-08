@@ -153,8 +153,7 @@ def process_unordered_streams(stream: Stream, client: ZendeskSell):
             endpoint, order_by=order_by, order_dir=order_dir, per_page=per_page
         )
 
-        if state:
-            record_gen = skip_unordered(record_gen, state, partition_key)
+        record_gen = skip_unordered(record_gen, state, partition_key)
 
         process_stream(
             stream,
