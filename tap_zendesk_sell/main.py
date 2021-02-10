@@ -223,19 +223,21 @@ def process_stream(
     i = 0
     yield_values = [] if yield_field else None
     start_time = time.time()
+    start_state = state
     try:
         for record in record_gen:
             if replication_key:
 
                 replication_value = decode_dt(record[replication_key])
 
-                if state and replication_value < state:
+                if start_state and replication_value < start_state:
                     continue
-
+                
                 stream.set_stream_state(
                     stream_id, replication_key, encode_dt(replication_value)
                 )
-                state = replication_value
+                if (not state) or (replication_value > state):
+                    state = replication_value
 
             stream.write_record(record, stream_id)
 
