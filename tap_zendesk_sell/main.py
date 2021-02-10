@@ -69,7 +69,7 @@ def tap(config_filename: str, state_filename: Optional[str]):
     )
 
     try:
-        process_dependent_streams(stream, client)
+        # process_dependent_streams(stream, client)
         process_ordered_streams(stream, client)
         process_unordered_streams(stream, client)
     except Exception:
@@ -172,6 +172,7 @@ def process_ordered_streams(stream: Stream, client: ZendeskSell):
     per_page = 100
 
     for endpoint in [
+        "deals",
         "contacts",
         "collaborations",
         "deal_sources",
